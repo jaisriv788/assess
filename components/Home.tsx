@@ -15,6 +15,7 @@ export function Main() {
   const router = useRouter();
 
   const [data, setData] = useState<MyMovies[]>([]);
+  const [searched, setSearched] = useState<string>("");
 
   useEffect(() => {
     async function fetchdata() {
@@ -31,6 +32,10 @@ export function Main() {
     fetchdata();
   }, []);
 
+  const filteredMovies = data.filter(
+    (movie) => movie.name.toLowerCase().includes(searched.toLowerCase()) // Case-insensitive search
+  );
+
   return (
     <div className="h-80 p-10 flex flex-col gap-5">
       <div className="text-3xl font-semibold">The best movie review site!</div>
@@ -38,6 +43,8 @@ export function Main() {
         {" "}
         <Search size={20} />
         <input
+          value={searched} // Bind searchTerm state to input value
+          onChange={(e) => setSearched(e.target.value)}
           className="w-full  outline-none"
           type="text"
           placeholder="Search for your favourite movie."
@@ -45,11 +52,16 @@ export function Main() {
       </div>
 
       <div className="grid grid-cols-3 gap-16">
-        {data.map((data) => {
+        {filteredMovies.map((data) => {
           return (
-            <div key={data.id} className="bg-indigo-200  px-8 py-8 flex flex-col gap-2">
+            <div
+              key={data.id}
+              className="bg-indigo-200  px-8 py-8 flex flex-col gap-2"
+            >
               <div className="text-xl font-semibold">{data.name}</div>
-              <div className="text-lg italic">Released: {new Date(data.releaseDate).toLocaleDateString()}</div>
+              <div className="text-lg italic">
+                Released: {new Date(data.releaseDate).toLocaleDateString()}
+              </div>
               <div className="font-bold">Rating: {data.averageRating}</div>
               <div className="flex justify-end gap-2 ">
                 <Eye
