@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.h20{
+    height: 10%;
+}
+
+.h80{
+    height: 100%;
+}
+

@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+}
+
+
+model Movie {
+  id            String      @id @default(uuid()) // Primary key
+  name          String
+  releaseDate   DateTime
+  averageRating Float?   @default(0) // Optional field, can be null
+  ratings       Rating[] // One-to-many relationship with Rating model
+}
+
+model Rating {
+  id          String      @id @default(uuid()) // Primary key
+  movieId     String
+  reviewerName String?  @default("unknown")// Optional field
+  rating      Float     @default(0) // Default rating if not provided
+  reviewComments String? // Optional field
+  movie       Movie     @relation(fields: [movieId], references: [id]) // Foreign key relationship
+ 
+}
